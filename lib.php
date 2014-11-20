@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Bis wohin soll das log in der Kursübersicht durchgesucht werden?
+ * How old may changes should be at maximum?
  *
  * @param int $courseid
  *
@@ -45,10 +45,10 @@ function course_overview_ext_get_timestart($courseid = SITEID)
 }
 
 /**
- * Findet die neuesten Aktivitäten / Aktivitätsupdates eines Kurses
+ * Find new/changed activities
  *
  * @param stdClass $course
- * @param array<string> $htmlarray Änderungen werden dort abgelegt
+ * @param array<string> $htmlarray Place where changes are stored
  *
  * @package block_course_overview
  * @see block_recent_activity::get_structural_changes()
@@ -71,7 +71,7 @@ function course_overview_ext_structural_changes($course, &$htmlarray)
                 WHERE timecreated > :tc AND courseid = :cid
                 GROUP BY cmid
                 ORDER BY timemodified ASC";
-	$params = array("tc" => isis_course_overview_get_timestart($course->id), "cid" => $course->id);
+	$params = array("tc" => course_overview_ext_get_timestart($course->id), "cid" => $course->id);
 	$logs = $DB->get_records_sql($sql, $params);
 
 	if (isset($logs[0])) {
@@ -106,7 +106,7 @@ function course_overview_ext_structural_changes($course, &$htmlarray)
 										"action" => "deletedactivity",
 										"infotext" => html_writer::div($info, $log->modname . " overview")),
 							'module' => $log->modname
-						); // Die Struktur von $changelist wurde gegenüber der Vorlage geändert.
+						); // The structure of $changelist is changed from default.
 
 			} else if (!$wasdeleted && isset($modinfo->cms[$log->cmid]) && $canviewupdated) {
 				// Module was either added or updated during this interval and it currently exists.
@@ -132,12 +132,12 @@ function course_overview_ext_structural_changes($course, &$htmlarray)
 				$module = $change["module"];
 				$action = $change["info"]["action"];
 				if (isset($htmlarray[$course->id][$module])) {
-					$htmlarray[$course->id][$module] = html_writer::div(html_writer::div(get_string($action . "_course_overview_info", "local_isis"), "info"), $module . " overview")
+					$htmlarray[$course->id][$module] = html_writer::div(html_writer::div(get_string($action . "_course_overview_info", "local_course_overview_ext"), "info"), $module . " overview")
 					                                 . $htmlarray[$course->id][$module]; // add/update VOR der "normalen" Nachricht anzeigen
 				} else {
-					$htmlarray[$course->id]["isis2".$module] = $change["info"];
-					//dieser String wird woanders aufgebaut
-					//@see block_course_overview_renderer::activity_display
+					$htmlarray[$course->id]["COEXT".$module] = $change["info"];
+					// This string is created elsewhere.
+					// @see block_course_overview_renderer::activity_display
 				}
 			}
 		}
@@ -145,10 +145,10 @@ function course_overview_ext_structural_changes($course, &$htmlarray)
 }
 
 /**
- * Startzeit-Selektor für Kursübersicht
+ * Start time selector for overview
  *
- * @param moodle_url $url URL der Weiterleitung, nach dem Einstellen der Option
- * @param string $name Name des Objektes
+ * @param moodle_url $url URL of redirect after the option was set
+ * @param string $name Name of the object
  * @return single_select
  *
  * @see block_course_overview_renderer::editing_bar_head
@@ -158,14 +158,14 @@ function course_overview_ext_structural_changes($course, &$htmlarray)
 function course_overview_ext_timestart_select(moodle_url $url, $name = "mytimestart")
 {
 	$modes = array(
-				"0" => get_string("lastcourseaccess", "local_isis"),
-				"1" => get_string("lastday", "local_isis"),
-				"2" => get_string("lastweek", "local_isis"),
-				"3" => get_string("lastmonth", "local_isis"),
-				"4" => get_string("lastlogin", "local_isis")
+				"0" => get_string("lastcourseaccess", "local_course_overview_ext"),
+				"1" => get_string("lastday", "local_course_overview_ext"),
+				"2" => get_string("lastweek", "local_course_overview_ext"),
+				"3" => get_string("lastmonth", "local_course_overview_ext"),
+				"4" => get_string("lastlogin", "local_course_overview_ext")
 			);
 	$select = new single_select(new moodle_url("/my/index.php"), $name, $modes, get_user_preferences("course_overview_timestart_for_log", "0"));
-	$select->set_label(get_string("co_timestart_label", "local_isis"));
+	$select->set_label(get_string("co_timestart_label", "local_course_overview_ext"));
 
 	return $select;
 }

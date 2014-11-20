@@ -30,6 +30,7 @@ $string["lastday"] = 'den letzten 24 Stunden.';
 $string["lastweek"] = 'der letzten Woche.';
 $string["lastmonth"] = 'dem letzten Monat.';
 $string["add_course_overview"] = 'Eine neue Aktivit&auml;t wurde vor kurzem erstellt.';
+$string["added_course_overview"] = 'Eine neue Aktivit&auml;t wurde vor kurzem erstellt.';
 $string["update_course_overview"] = 'Eine bestehende Aktivit&auml;t wurde k&uuml;rzlich aktualisiert.';
 $string["delete_course_overview"] = 'Eine Aktivit&auml;t wurde vor kurzem gel&ouml;scht.';
 $string["add_course_overview_info"] = 'Diese Aktivit&auml;t wurde vor kurzem erstellt.';

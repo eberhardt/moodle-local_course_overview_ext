@@ -1,0 +1,77 @@
+diff blocks/course_overview/block_course_overview.php ../original/blocks/course_overview/block_course_overview.php
+70,76d69
+<         // [course_overview_ext] Begin patch.
+<         // Save setting "mytimestart".
+<         $updatemytimestart = optional_param("mytimestart", -1, PARAM_INT);
+<         if ($updatemytimestart >= 0) {
+<         	set_user_preference("course_overview_timestart_for_log", $updatemytimestart);
+<         }
+<         // [course_overview_ext] End patch.
+Gemeinsame Unterverzeichnisse: blocks/course_overview/db und ../original/blocks/course_overview/db.
+Gemeinsame Unterverzeichnisse: blocks/course_overview/lang und ../original/blocks/course_overview/lang.
+diff blocks/course_overview/locallib.php ../original/blocks/course_overview/locallib.php
+45,57d44
+<         	// [course_overview_ext] Begin patch.
+<          	// Show new/changed activites:
+<          	// It is important to call our own function AFTER the call of $fname!
+<          	// I need the information of the course modules in order to create the entries of $htmlarray.
+<          	// Update 02/09/2014: Bug - It was not possible to call the my-home page, when the block was moved above the navigation.
+<          	global $CFG; // Bugfix from 02/09/2014.
+<          	if (file_exists($CFG->dirroot . '/local/course_overview_ext/lib.php'))
+<          	{
+<          		require_once $CFG->dirroot . '/local/course_overview_ext/lib.php';
+<          		foreach ($courses as $course)
+<          			course_overview_ext_structural_changes($course, $htmlarray);
+<          	}
+<            // [course_overview_ext] End patch.
+diff blocks/course_overview/renderer.php ../original/blocks/course_overview/renderer.php
+162,172d161
+<         	// [course_overview_ext] Begin patch.
+<          	// Check, if the key have special information, which we have applied in course_overview_ext_structural_changes.
+<         	// After that normalize it to Moodle default. In that way, we can use core code again.
+<          	$onlystructural = (substr($module, 0, 5) === "COEXT"); // This key exists only, when no additional information of this module is available.
+<          	$action = "";
+<          	if ($onlystructural) {
+<          		$action = $overview[$module]["action"];
+<          		$infotext = $overview[$module]["infotext"];
+<          		$module = substr($module, 5);
+<          	}
+<          	// [course_overview_ext] End patch.
+182,193d170
+<             // [course_overview_ext] Begin patch.
+<             // Show changed activities ONLY (otherwise the message is stored in $overview[$module]).
+<             if ($onlystructural) {
+<             	// $renew icontext. This behaviour has the advantage, that we just insert code and remain old one
+<             	$icontext = $this->output->pix_icon("i/" . $action, "", "local_course_overview_ext", array("class" => "iconextra"))
+<             	          . html_writer::link($url, $this->output->pix_icon('icon', $modulename, "mod_" . $module, array("class" => "iconlarge")))
+<             	          . get_string($action, "moodle", $modulename);
+<             	// Set $overview[$module] so that we can use the old "footer"
+<             	// Remember: "COEXT" was cut of before, i.e. $module is just the module name (in frankenstyle) again.
+<             	$overview[$module] = $infotext;
+<             }
+<             // [course_overview_ext] End patch.
+221,225d197
+<         // [course_overview_ext] Begin patch.
+<         // Start time selector for "recent activities".
+<         $select = course_overview_ext_timestart_select($url);
+<         $output .= $this->output->render($select);
+<         // [course_overview_ext] End patch.
+diff blocks/course_overview/styles.css ../original/blocks/course_overview/styles.css
+90c90
+<     margin: 0 0 .3em 0; /* [course_overview_ext] design alterations */
+---
+>     margin: 0;
+98,110d97
+< }
+< 
+< /* [course_overview_ext] design alterations */
+< .block_course_overview .singleselect label {
+<     float: left;
+<     width: 20em;
+<     padding-top: .3em;
+<     
+< }
+< 
+< /* [course_overview_ext] design alterations */
+< .block_course_overview .singleselect select {
+<     width: 15em;
