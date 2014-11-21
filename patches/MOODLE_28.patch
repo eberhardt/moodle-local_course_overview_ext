@@ -17,10 +17,10 @@ index 2812cce..4dfbbad 100644
          profile_load_custom_fields($USER);
  
 diff --git a/blocks/course_overview/locallib.php b/blocks/course_overview/locallib.php
-index df94445..41d4dda 100644
+index 746ccf4..4927faf 100644
 --- a/blocks/course_overview/locallib.php
 +++ b/blocks/course_overview/locallib.php
-@@ -42,6 +42,19 @@ function block_course_overview_get_overviews($courses) {
+@@ -46,6 +46,19 @@ function block_course_overview_get_overviews($courses) {
              foreach ($modules as $fname) {
                  $fname($courses, $htmlarray);
              }
@@ -41,10 +41,10 @@ index df94445..41d4dda 100644
      }
      return $htmlarray;
 diff --git a/blocks/course_overview/renderer.php b/blocks/course_overview/renderer.php
-index 76ef098..e21691d 100644
+index 8923322..33934f4 100644
 --- a/blocks/course_overview/renderer.php
 +++ b/blocks/course_overview/renderer.php
-@@ -159,6 +159,17 @@ class block_course_overview_renderer extends plugin_renderer_base {
+@@ -181,6 +181,17 @@ class block_course_overview_renderer extends plugin_renderer_base {
      protected function activity_display($cid, $overview) {
          $output = html_writer::start_tag('div', array('class' => 'activity_info'));
          foreach (array_keys($overview) as $module) {
@@ -62,7 +62,7 @@ index 76ef098..e21691d 100644
              $output .= html_writer::start_tag('div', array('class' => 'activity_overview'));
              $url = new moodle_url("/mod/$module/index.php", array('id' => $cid));
              $modulename = get_string('modulename', $module);
-@@ -168,6 +179,18 @@ class block_course_overview_renderer extends plugin_renderer_base {
+@@ -190,6 +201,18 @@ class block_course_overview_renderer extends plugin_renderer_base {
              } else {
                  $icontext .= get_string("activityoverview", 'block_course_overview', $modulename);
              }
@@ -81,7 +81,7 @@ index 76ef098..e21691d 100644
  
              // Add collapsible region with overview text in it.
              $output .= $this->collapsible_region($overview[$module], '', 'region_'.$cid.'_'.$module, $icontext, '', true);
-@@ -195,6 +218,11 @@ class block_course_overview_renderer extends plugin_renderer_base {
+@@ -217,6 +240,11 @@ class block_course_overview_renderer extends plugin_renderer_base {
          $select = new single_select($url, 'mynumber', $options, block_course_overview_get_max_user_courses(), array());
          $select->set_label(get_string('numtodisplay', 'block_course_overview'));
          $output .= $this->output->render($select);
