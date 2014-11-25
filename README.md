@@ -17,7 +17,7 @@ An appropriate patch will be given in future releases.
 On a linux server go to your Moodle root directory and type
 `patch -p1 < local/course_overview_ext/patches/MOODLE_{version}.patch`
 
-Change {version} with resprect to your Moodle version.
+Change {version} to your Moodle version.
 
 Contributions
 ===============
